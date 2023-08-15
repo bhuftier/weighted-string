@@ -1,0 +1,4 @@
+#include <fstream>
+
+// the configured options and settings for Tutorial
+#define TEST_FILE(name) std::ifstream(std::string("@CMAKE_SOURCE_DIR@/test/file/") + name)
