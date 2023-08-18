@@ -1,12 +1,9 @@
 set(TEST_SOURCES
-    "weighted_element_test.cpp"
-    "weighted_string_test.cpp"
-    "readme_example_test.cpp"
+    "test_weighted_element.cpp"
+    "test_weighted_string.cpp"
+    "test_dna_weighted_string.cpp"
+    # "test_readme_example.cpp"
 )
-
-# GoogleTest requires at least C++14
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -23,6 +20,11 @@ enable_testing()
 
 # Executable
 add_executable(wstr-test ${TEST_SOURCES})
+
+# GoogleTest requires at least C++14
+set_target_properties(wstr-test PROPERTIES CXX_STANDARD 17)
+set_target_properties(wstr-test PROPERTIES CXX_STANDARD_REQUIRED ON)
+
 target_link_libraries(wstr-test PUBLIC GTest::gtest_main)
 target_link_libraries(wstr-test PUBLIC wstr)
 
