@@ -56,6 +56,20 @@ TYPED_TEST(DnaWeightedStringTest, Proba) {
     EXPECT_EQ(ws[0].p('N'), 1.);
 }
 
+TEST(DnaWeightedStringTest, Constructors) {
+    w_string_dna ws = {
+        w_string_dna::w_char({.2, .4, .2, .2}),
+        w_string_dna::w_char({.1, .5, .1, .3}),
+        w_string_dna::w_char({.2, .4, .4, 0.}),
+    };
+
+    w_string_dna_gap ws2 = {
+        w_string_dna_gap::w_char({.2, .4, .2, .1, .1}),
+        w_string_dna_gap::w_char({.1, .5, .1, .2, .1}),
+        w_string_dna_gap::w_char({.2, .4, .4, 0., 0.}),
+    };
+}
+
 TYPED_TEST(DnaWeightedStringTest, File) {
     TypeParam ws;
     TEST_FILE("dna1.txt") >> ws;

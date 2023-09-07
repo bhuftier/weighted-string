@@ -55,21 +55,48 @@ TYPED_TEST(WeightedStringTest, Basic) {
     EXPECT_EQ(ws.heaviest_ungap(), "bb");
 }
 
+TEST(WeightedStringTest, Constructors) {
+    w_string_map ws = {
+        w_string_map::w_char({{'a', .2}, {'b', .6}, {'c', .2}}),
+        w_string_map::w_char({{'a', .1}, {'b', .3}, {'c', .6}}),
+        w_string_map::w_char({{'a', .8}, {'d', .2}}),
+        w_string_map::w_char({{'b', 1.}})
+    };
+
+    static const char dna[] = "acgt";
+
+    w_string_array<dna> ws2 = {
+        w_string_array<dna>::w_char({.2, .4, .2, .2}),
+        w_string_array<dna>::w_char({.1, .5, .1, .3}),
+        w_string_array<dna>::w_char({.2, .4, .4, 0.}),
+    };
+
+    EXPECT_EQ(ws2[0].p('a'), .2);
+    EXPECT_EQ(ws2[0].p('c'), .4);
+    EXPECT_EQ(ws2[0].p('g'), .2);
+    EXPECT_EQ(ws2[0].p('t'), .2);
+
+    EXPECT_EQ(ws2[2].p('a'), .2);
+    EXPECT_EQ(ws2[2].p('c'), .4);
+    EXPECT_EQ(ws2[2].p('g'), .4);
+    EXPECT_EQ(ws2[2].p('t'), .0);
+}
+
 TYPED_TEST(WeightedStringTest, Operators) {
     using WType = weighted_string<TypeParam>;
     using CType = WeightedStringTest<TypeParam>;
 
-    // WType ws = {
-    //     CType::el({{'a', 1.}})
-    // };
+    WType ws = {
+        CType::el({{'a', 1.}})
+    };
 
-    // WType ws2 = ws;
+    WType ws2 = ws;
 
-    // EXPECT_EQ(ws2, ws);
+    EXPECT_EQ(ws2, ws);
 
-    // WType ws3(10, CType::el({{'a', 1.}}));
+    WType ws3(10, CType::el({{'a', 1.}}));
 
-    // EXPECT_EQ(ws3.size(), 10);
+    EXPECT_EQ(ws3.size(), 10);
 }
 
 TYPED_TEST(WeightedStringTest, FromFile) {

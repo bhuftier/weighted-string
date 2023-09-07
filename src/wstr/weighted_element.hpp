@@ -22,8 +22,6 @@ namespace wstr
   * - double at(const T&) const                 : Return the probability of an element (should be 0 if the element is not in the container!)
   * - const T& heaviest() const                 : Return the value with the heaviest probability
   * - double sum() const                        : Return the sum of all probabilities
-  * 
-  * The container should also have the possibility to be used in a foreach-like loop.
   *
   * \sa wstr::w_map
   * \sa wstr::w_array
@@ -110,6 +108,12 @@ class weighted_element
 
             return fabs(1.0 - sum) < precision + std::numeric_limits<double>::epsilon();
         }
+
+        //! Get container and all probabilities
+        const Container& probabilities() const
+        {
+            return _probabilities;
+        }
 };
 
 
@@ -175,8 +179,9 @@ class w_map : public std::unordered_map<T, double, Hash, KeyEqual, Allocator>
   * \tparam Translator  Type of object to translate
   *
   * The Translator type must have two static methods:
-  * - size_t get_indice(const T&)   : Return the indice of a given element (should be between 0 and N - 1).
   * - const T& get_element(size_t)  : Return the element at a given indice.
+  * - size_t get_indice(const T&)   : Return the indice of a given element (should be between 0 and N - 1).
+  *                                   If the element do not belong to the array, should throw a std::runtime_error exception.
   *
   * \sa std::array
  */ 
@@ -190,8 +195,11 @@ class w_array : public std::array<double, N>
     public:
 
         //! Use basic constructor to allow initialization with bracket such as {.2, .8}
-        //! Just if c++17 or higher
-        using Base = std::array<double, N>;
+        template<class... U>
+        w_array(U&&... u) : std::array<double, N>{std::forward<U>(u)...}
+        {
+
+        }
 
         w_array() : std::array<double, N>()
         {
@@ -208,7 +216,12 @@ class w_array : public std::array<double, N>
 
         double at(const T& key) const
         {
-            return std::array<double, N>::at(Translator::get_indice(key));
+            try {
+                return std::array<double, N>::at(Translator::get_indice(key));
+            }
+            catch (const std::runtime_error& e) {
+                return 0.;
+            }
         }
         
         const T& heaviest() const

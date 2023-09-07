@@ -15,7 +15,7 @@ Weighted strings are often used to describe DNA sequences where nucleotids are n
 
 ## This library
 
-This is why this repository has been created. I needed to used some weighted sequence in my internship and I didn't find any library to handle this object. I chose to create my own library so that other people wouldn't need to code it from scratch.
+This is why this repository has been created. I needed to use some weighted sequence in my internship and I didn't find any library to handle these objects. I chose to create my own library so that other people wouldn't need to code it from scratch.
 
 ## Compilation
 
@@ -23,7 +23,7 @@ You need `cmake` and `make` installed on your machine in order to compile and in
 
 ## How to use
 
-The main class of this library is `wstr::wieghted_string` (or `wstr:w_string`) which extends from `std::vector<wstr::w_char>`. It means that you have access to all method of a vector in a weighted string. When you have big datas, you often have a file to store it. Our class allow to be created from input via the operator `>>`.
+The main class of this library is `wstr::weighted_string` (or `wstr:w_string`) which extends from `std::vector<wstr::w_char>`. It means that you have access to all method of a vector in a weighted string. When you have big datas, you often have a file to store it. Our class allow to be created from input via the operator `>>`.
 
 The file need a specific format.
 
@@ -45,7 +45,7 @@ Each line must have $\sigma$ space separated values where $\sigma$ is the size o
 
 ### Collection of weighted string
 
-There is another predefined type which is `wstr::ws_collection` which is a typdef for `std::vector<wstr::w_string>`. This allow you to easily keep multiple weighted strings in a collection. You can also create it from a file with the `>>` operator. You need to give the number of weighted string, then the alphabet (it has to be the same for each strings, but remember that you can freely put probability 0 so this is not a big issue). Then you should give `n` weighted strings which are represented by their size followed by their characters. Here is an example:
+There is another predefined type which is `wstr::ws_collection` which is a typedef for `std::vector<wstr::w_string>`. This allow you to easily keep multiple weighted strings in a collection. You can also create it from a file with the `>>` operator. You need to give the number of weighted string, then the alphabet (it has to be the same for each strings, but remember that you can freely put probability 0 so this is not a big issue). Then you should give `n` weighted strings which are represented by their size followed by their characters. Here is an example:
 
 ```
 3
@@ -66,7 +66,7 @@ ACGT
 
 ### Option for weighted strings
 
-Stream manipulators decribe in this section work for weighted strings and collection of weighted strings.
+Stream manipulators decribed in this section work for weighted strings and collection of weighted strings.
 
 #### Gaps
 
@@ -86,7 +86,7 @@ std::ifstream input("my_file");
 input >> ws_gap >> ws;
 ```
 
-When using this, the last character of the alphabet will be considered as the gap character, so in the example, if you ant `-` to be the gap character, the alphabet inside `my_file` must be something loke `abcd-`.
+When using this, the last character of the alphabet will be considered as the gap character, so in the example, if you want `-` to be the gap character, the alphabet inside `my_file` must be something like `abcd-`.
 
 To remove the gap for other ws, you have to call `input >> ws_no_gap`.
 
@@ -128,7 +128,7 @@ w_char wc2({{'a', .5}, {'b', .5}});
 wc2['a'] = .4;
 wc2.set_precision(.1);
 // Without the set_precision, return false
-// With the set_preceision, return true
+// With the set_precision, return true
 wc2.is_good();
 
 // Third method for weighted strings

@@ -127,6 +127,32 @@ TYPED_TEST(WeightedElementTest, Throws) {
     }, std::invalid_argument);
 }
 
+TEST(WeightedElementTest, ArraySpecific) {
+    struct my_translator {
+        static size_t get_indice(char c) {
+            if (c == 'a') return 0;
+            throw std::runtime_error("");
+        }
+
+        static char get_element(size_t i) {
+            if (i == 0) return 'a';
+            throw std::runtime_error("");
+        }
+    };
+
+    weighted_element<char, w_array<char, 1, my_translator>> ws = {1.};
+
+    EXPECT_EQ(ws.p('a'), 1.);
+    EXPECT_EQ(ws.p('b'), 0.);
+
+    ws['a'] = 1.2;
+
+    EXPECT_EQ(ws.p('a'), 1.2);
+    EXPECT_EQ(ws.p('b'), 0.);
+
+    EXPECT_THROW({ws['b'];}, std::runtime_error);
+}
+
 std::vector<int> v0 = {1, 2, 3, 4};
 std::vector<int> v1 = {1, 2, 3, 5};
 

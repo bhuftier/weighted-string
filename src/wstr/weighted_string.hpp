@@ -4,7 +4,7 @@
 #include <cstring>
 #include <iostream>
 
-#include "weighted_element.hpp"
+#include "weighted_char.hpp"
 
 #define NO_GAP -1
 
@@ -13,7 +13,7 @@ namespace wstr
 
 //! A class for weighted strings based on a collection (std::vector) of weighted characters.
 /*! 
-  * \tparam Container   Same as Container param for 
+  * \tparam Container   Same as Container param for weighted_char
   * \tparam Allocator   The allocator for the weighted elements
   * 
   * This class is a public inheritance of std::vector for weighted character.
@@ -22,17 +22,17 @@ namespace wstr
   *
   * A weighted string can have a gap character assigned to it.
   *
-  * \sa wstr::weighted_element
+  * \sa wstr::weighted_char
  */
 template<
     class Container,
-    class Allocator = std::allocator<weighted_element<char, Container>>
+    class Allocator = std::allocator<weighted_char<Container>>
 >
-class weighted_string : public std::vector<weighted_element<char, Container>, Allocator>
+class weighted_string : public std::vector<weighted_char<Container>, Allocator>
 {
     public:
 
-        typedef weighted_element<char, Container> w_char;
+        typedef weighted_char<Container> w_char;
 
     private:
     
@@ -42,7 +42,7 @@ class weighted_string : public std::vector<weighted_element<char, Container>, Al
 
         //! Use basic constructor to allow initialization with bracket such as {el1, el2}
         //! Allow all other std::vector constructors
-        // using std::vector<weighted_element<char, Container>>::vector;
+        using std::vector<weighted_char<Container>, Allocator>::vector;
 
         void set_gap(char gap)
         {
@@ -144,17 +144,20 @@ struct basic_ws_translator
 };
 
 //! weighted char using map
-using w_char_map = w_map<char>;
+using w_char_map = wc_map<>;
 
-//! weighted car using an array
+//! weighted string using a map as weighted element
+using w_string_map = weighted_string<w_char_map>;
+
+//! weighted string collection for weighted string using map
+using w_string_map_collection = weighted_string_collection<w_string_map>;
+
+//! weighted char using an array
 /*!
   * \tparam alph    The alphabet of the weighted char
  */
 template <const char* alph>
-using w_char_array = w_array<char, strlen(alph), basic_ws_translator<alph>>;
-
-//! weighted string using a map as weighted element
-using w_string_map = weighted_string<w_char_map>;
+using w_char_array = wc_array<strlen(alph), basic_ws_translator<alph>>;
 
 //! weighted string using an array as weighted element
 /*!
@@ -162,6 +165,13 @@ using w_string_map = weighted_string<w_char_map>;
  */
 template <const char* alph>
 using w_string_array = weighted_string<w_char_array<alph>>;
+
+//! weighted collection for weighted string using array
+/*!
+  * \tparam alph    The alphabet of the weighted collection
+ */
+template <const char* alph>
+using w_string_array_collection = weighted_string_collection<w_string_array<alph>>;
 
 
 /*! 
@@ -254,7 +264,7 @@ void construct_ws_from_file(std::istream& in, weighted_string<Container>& ws, si
             }
         }
         
-        ws.emplace_back(weighted_element<char, Container>(wc, ws_strict(), ws_precision()));
+        ws.emplace_back(weighted_char<Container>(wc, ws_strict(), ws_precision()));
     }
 }
 

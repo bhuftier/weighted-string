@@ -42,6 +42,8 @@ class dna_container : public w_char_array<alph>
 {
     public:
 
+        using w_char_array<alph>::w_char_array;
+
         double at(const char& key) const
         {
             if (dna_ext_alph.find(key) != dna_ext_alph.end()) {
@@ -61,7 +63,8 @@ class w_string_dna_gap : public weighted_string<dna_container<dna_alph_gap>>
 {
     public:
 
-        inline w_string_dna_gap() : weighted_string<dna_container<dna_alph_gap>>()
+        template<class... U>
+        w_string_dna_gap(U&&... u) : weighted_string<dna_container<dna_alph_gap>>{std::forward<U>(u)...}
         {
             set_gap(dna_gap);
         }

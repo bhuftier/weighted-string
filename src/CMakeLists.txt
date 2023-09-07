@@ -1,5 +1,6 @@
 set(SOURCES
     "wstr/weighted_element.hpp"
+    "wstr/weighted_char.hpp"
     "wstr/weighted_string.hpp"
     "wstr/dna_weighted_string.hpp"
 )
